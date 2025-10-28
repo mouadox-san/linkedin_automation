@@ -41,7 +41,7 @@ Follow these steps to get your LinkedIn Auto Poster up and running.
     ```
 2.  **How to Find Your LinkedIn Person URN (via Postman)**
 
-    Your LinkedIn Person URN (e.g., `urn:li:person:iz-GTCLBmh`) uniquely identifies your LinkedIn profile. Here’s a simple step-by-step guide to obtain it using Postman and your LinkedIn app credentials:
+    Your LinkedIn Person URN (e.g., `urn:li:person:XXXXXXXXX`) uniquely identifies your LinkedIn profile. Here’s a simple step-by-step guide to obtain it using Postman and your LinkedIn app credentials:
 
     1.  **Open Postman** and create a new request.
     2.  Go to the **Authorization** tab and select:
