@@ -1,0 +1,23 @@
+name: LinkedIn Auto Poster
+
+on:
+  schedule:
+    - cron: '0 8 * * *'   # runs every day at 08:00 UTC
+  workflow_dispatch:      # allows manual run
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PROFILE_URN: ${{ secrets.LINKEDIN_PROFILE_URN }}
+        run: python main.py
