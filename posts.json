@@ -1,27 +1,17 @@
 [
   {
     "date": "2025-10-28",
-    "content": "A study conducted in 2024 demonstrates that low-dose CT scans can significantly reduce patient radiation exposure while maintaining high diagnostic accuracy. This approach is particularly valuable in screening programs, where repeated imaging is common. Radiologists are increasingly adopting optimized protocols to ensure both patient safety and clinical reliability, making low-dose CT a critical advancement in modern radiology practice.",
-    "image": "https://www.rsna.org/-/media/Images/News/2024/2024-06-12-Low-Dose-CT.jpg"
+    "content": "Today's Radiology Update: AI in medical imaging is rapidly advancing! New algorithms are improving diagnostic accuracy for early cancer detection, reducing false positives, and streamlining radiologist workflows. This promises faster, more precise diagnoses for patients.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/AI_in_medical_imaging.jpg/640px-AI_in_medical_imaging.jpg"
   },
   {
     "date": "2025-11-01",
-    "content": "Recent research from 2024 highlights the growing role of artificial intelligence in radiology. Advanced AI algorithms have been shown to detect early signs of lung cancer on chest X-rays with remarkable precision, assisting radiologists in identifying subtle abnormalities that might otherwise be missed. These tools not only enhance diagnostic accuracy but also have the potential to reduce interpretation time, ultimately improving patient outcomes and workflow efficiency.",
-    "image": "https://www.rsna.org/-/media/Images/News/2023/2023-09-07-AI-Lung-Cancer.jpg"
+    "content": "Focus on MRI: Innovations in MRI technology are leading to faster scan times and higher resolution images. This is particularly beneficial for pediatric patients and those with claustrophobia, making diagnostic imaging more comfortable and accessible.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MRI_scanner.jpg/640px-MRI_scanner.jpg"
   },
   {
     "date": "2025-11-05",
-    "content": "A 2023 case report presents a rare bone fracture pattern that was identified using advanced imaging techniques. The report emphasizes the importance of comprehensive imaging for accurate diagnosis, as atypical fracture patterns can often be overlooked. By leveraging high-resolution imaging and 3D reconstructions, radiologists can provide detailed assessments that guide optimal patient management and surgical planning.",
-    "image": "https://www.auntminnie.com/images/2023/07/Skull-Fractures.jpg"
-  },
-  {
-    "date": "2025-11-09",
-    "content": "Innovations in MRI technology have led to the development of faster acquisition sequences, which research indicates could reduce scan times by up to 50% without compromising image quality. These advancements are particularly beneficial for patients who have difficulty remaining still during scans, such as pediatric or claustrophobic patients. Faster sequences also increase scanner throughput, allowing radiology departments to serve more patients efficiently while maintaining high diagnostic standards.",
-    "image": "https://www.siemens-healthineers.com/-/media/images/siemens-healthineers/mri.jpg"
-  },
-  {
-    "date": "2025-11-13",
-    "content": "Point-of-care ultrasound (POCUS) is becoming increasingly essential in emergency care. A recent review emphasizes that rapid bedside ultrasound can aid in the diagnosis of trauma-related injuries, guide procedural interventions, and expedite clinical decision-making. Its non-invasive nature, portability, and real-time imaging capabilities make it a vital tool for emergency physicians and radiologists working in high-pressure settings.",
-    "image": "https://www.medimaging.net/images/2024/07/Ultrasound-Emergency-Care.jpg"
+    "content": "Radiology Research Spotlight: A recent study highlights the effectiveness of low-dose CT scans in lung cancer screening. This approach significantly reduces radiation exposure while maintaining high sensitivity, improving patient safety in preventative care.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/CT_scan_of_lungs.jpg/640px-CT_scan_of_lungs.jpg"
   }
 ]
