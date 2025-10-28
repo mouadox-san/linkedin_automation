@@ -4,17 +4,18 @@ import os
 import requests
 
 LINKEDIN_ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN")
-ORGANIZATION_URN = os.getenv("LINKEDIN_ORG_URN")  # e.g., "urn:li:organization:xxxxxxxx"
+PERSON_URN = os.getenv("LINKEDIN_PERSON_URN")  # e.g., "urn:li:person:xxxxxxxx"
 
 def post_to_linkedin(content):
     url = "https://api.linkedin.com/v2/ugcPosts"
     headers = {
         "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
         "X-Restli-Protocol-Version": "2.0.0",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "LinkedIn-Version": "202309"  # Use a recent version
     }
     payload = {
-        "author": ORGANIZATION_URN,
+        "author": PERSON_URN,
         "lifecycleState": "PUBLISHED",
         "specificContent": {
             "com.linkedin.ugc.ShareContent": {
