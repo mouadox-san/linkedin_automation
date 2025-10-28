@@ -38,7 +38,10 @@ def upload_image(image_url):
     asset_urn = upload_data["asset"]
 
     # Step 2: Download the image and upload it
-    image_response = requests.get(image_url, stream=True)
+    download_headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    image_response = requests.get(image_url, headers=download_headers, stream=True)
     if image_response.status_code != 200:
         print(f"Failed to download image from URL: {image_url}")
         return None
