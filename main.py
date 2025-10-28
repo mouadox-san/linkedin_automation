@@ -2,21 +2,14 @@ import json
 import datetime
 import os
 import requests
+import sys
 
 LINKEDIN_ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN")
 PERSON_URN = os.getenv("LINKEDIN_PERSON_URN")
 
-import json
-import datetime
-import os
-import requests
-
-LINKEDIN_ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN")
-PERSON_URN = os.getenv("LINKEDIN_PERSON_URN")
-
-def upload_image(image_url):
+def upload_image(local_image_path):
     """
-    Downloads an image from a URL, uploads it to LinkedIn, and returns the media asset URN.
+    Uploads a local image file to LinkedIn and returns the media asset URN.
     """
     headers = {
         "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
@@ -45,19 +38,19 @@ def upload_image(image_url):
     upload_url = upload_data["uploadMechanism"]["com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"]["uploadUrl"]
     asset_urn = upload_data["asset"]
 
-    # Step 2: Download the image and upload it
+    # Step 2: Read the local image file and upload it
     try:
-        image_response = requests.get(image_url, stream=True, timeout=10) # Added timeout
-        image_response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
-    except requests.exceptions.RequestException as e:
-        print(f"Failed to download image from URL: {image_url}. Error: {e}")
+        with open(local_image_path, "rb") as f:
+            image_data = f.read()
+    except FileNotFoundError:
+        print(f"Error: Local image file not found at {local_image_path}")
         return None
 
     upload_headers = {
         "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
         "Content-Type": "application/octet-stream"
     }
-    up_response = requests.put(upload_url, data=image_response.content, headers=upload_headers)
+    up_response = requests.put(upload_url, data=image_data, headers=upload_headers)
     
     if up_response.status_code != 201 and up_response.status_code != 200:
         print(f"Error uploading image: {up_response.status_code} {up_response.text}")
@@ -99,95 +92,51 @@ def post_to_linkedin(content, image_asset_urn=None):
     response = requests.post(url, headers=headers, json=payload)
     print(f"Post response: {response.status_code} {response.text}")
 
-def main():
+def get_post_data_for_today():
+    """
+    Reads posts.json and returns content and image_url for today's post.
+    """
     today = datetime.date.today().isoformat()
     try:
         with open("posts.json", "r", encoding="utf-8") as f:
             posts = json.load(f)
     except FileNotFoundError:
         print("Error: posts.json not found.")
-        return
+        return None, None
 
     for post in posts:
         if post.get("date") == today:
-            content = post.get("content", "")
-            image_url = post.get("image")
-            asset_urn = None
+            return post.get("content", ""), post.get("image")
+    return None, None
 
-            if image_url:
-                print(f"Found image for today's post: {image_url}")
-                asset_urn = upload_image(image_url)
+
+if __name__ == "__main__":
+    # This part will be executed when called from GitHub Actions
+    # It expects content and optionally a local image path as arguments
+    if len(sys.argv) > 1:
+        action = sys.argv[1]
+        if action == "get_data":
+            content, image_url = get_post_data_for_today()
+            print(f"CONTENT_TO_POST:::{content}")
+            print(f"IMAGE_URL_TO_DOWNLOAD:::{image_url}")
+        elif action == "post":
+            content = sys.argv[2]
+            local_image_path = sys.argv[3] if len(sys.argv) > 3 else None
             
+            asset_urn = None
+            if local_image_path and os.path.exists(local_image_path):
+                print(f"Uploading local image: {local_image_path}")
+                asset_urn = upload_image(local_image_path)
+            elif local_image_path:
+                print(f"Warning: Local image path provided but file not found: {local_image_path}")
+
             if content or asset_urn:
                 post_to_linkedin(content, asset_urn)
             else:
-                print("No content or image found for today's post.")
-            
-            break # Exit after finding and processing today's post
-
-if __name__ == "__main__":
-    main()
-
-
-def post_to_linkedin(content, image_asset_urn=None):
-    """
-    Posts content to LinkedIn, with an optional image.
-    """
-    url = "https://api.linkedin.com/v2/ugcPosts"
-    headers = {
-        "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
-        "X-Restli-Protocol-Version": "2.0.0",
-        "Content-Type": "application/json",
-        "LinkedIn-Version": "202309"
-    }
-
-    share_content = {
-        "shareCommentary": {"text": content},
-        "shareMediaCategory": "NONE"
-    }
-
-    if image_asset_urn:
-        share_content["shareMediaCategory"] = "IMAGE"
-        share_content["media"] = [{
-            "status": "READY",
-            "media": image_asset_urn
-        }]
-
-    payload = {
-        "author": PERSON_URN,
-        "lifecycleState": "PUBLISHED",
-        "specificContent": {"com.linkedin.ugc.ShareContent": share_content},
-        "visibility": {"com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"}
-    }
-
-    response = requests.post(url, headers=headers, json=payload)
-    print(f"Post response: {response.status_code} {response.text}")
-
-def main():
-    today = datetime.date.today().isoformat()
-    try:
-        with open("posts.json", "r", encoding="utf-8") as f:
-            posts = json.load(f)
-    except FileNotFoundError:
-        print("Error: posts.json not found.")
-        return
-
-    for post in posts:
-        if post.get("date") == today:
-            content = post.get("content", "")
-            image_url = post.get("image")
-            asset_urn = None
-
-            if image_url:
-                print(f"Found image for today's post: {image_url}")
-                asset_urn = upload_image(image_url)
-            
-            if content or asset_urn:
-                post_to_linkedin(content, asset_urn)
-            else:
-                print("No content or image found for today's post.")
-            
-            break # Exit after finding and processing today's post
-
-if __name__ == "__main__":
-    main()
+                print("No content or image asset to post.")
+        else:
+            print("Invalid action. Use 'get_data' or 'post'.")
+    else:
+        print("Usage: python main.py <action> [args]")
+        print("  For getting data: python main.py get_data")
+        print("  For posting: python main.py post \"<content>\" [local_image_path]")

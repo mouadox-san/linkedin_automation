@@ -16,8 +16,31 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Run script
+
+      - name: Get post data for today
+        id: get_data
+        run: |
+          python main.py get_data > data.txt
+          CONTENT=$(grep "CONTENT_TO_POST::" data.txt | sed 's/CONTENT_TO_POST:://')
+          IMAGE_URL=$(grep "IMAGE_URL_TO_DOWNLOAD::" data.txt | sed 's/IMAGE_URL_TO_DOWNLOAD:://')
+          echo "content=$CONTENT" >> "$GITHUB_OUTPUT"
+          echo "image_url=$IMAGE_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Download image (if available)
+        id: download_image
+        if: steps.get_data.outputs.image_url != 'None' && steps.get_data.outputs.image_url != ''
+        run: |
+          IMAGE_FILENAME="downloaded_image.$(echo "${{ steps.get_data.outputs.image_url }}" | rev | cut -d'.' -f1 | rev)"
+          curl -L -o "$IMAGE_FILENAME" "${{ steps.get_data.outputs.image_url }}"
+          echo "image_filename=$IMAGE_FILENAME" >> "$GITHUB_OUTPUT"
+
+      - name: Run script to post to LinkedIn
+        run: |
+          IMAGE_ARG=""
+          if [ -n "${{ steps.download_image.outputs.image_filename }}" ]; then
+            IMAGE_ARG="${{ steps.download_image.outputs.image_filename }}"
+          fi
+          python main.py post "${{ steps.get_data.outputs.content }}" "$IMAGE_ARG"
         env:
           LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
           LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
-        run: python main.py
