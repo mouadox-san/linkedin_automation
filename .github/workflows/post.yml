@@ -19,5 +19,5 @@ jobs:
       - name: Run script
         env:
           LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
-          LINKEDIN_PROFILE_URN: ${{ secrets.LINKEDIN_PROFILE_URN }}
+          LINKEDIN_ORG_URN: ${{ secrets.LINKEDIN_ORG_URN }}
         run: python main.py

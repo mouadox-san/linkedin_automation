@@ -4,7 +4,7 @@ import os
 import requests
 
 LINKEDIN_ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN")
-PROFILE_URN = os.getenv("LINKEDIN_PROFILE_URN")  # e.g., "urn:li:person:xxxxxxxx"
+ORGANIZATION_URN = os.getenv("LINKEDIN_ORG_URN")  # e.g., "urn:li:organization:xxxxxxxx"
 
 def post_to_linkedin(content):
     url = "https://api.linkedin.com/v2/ugcPosts"
@@ -14,7 +14,7 @@ def post_to_linkedin(content):
         "Content-Type": "application/json"
     }
     payload = {
-        "author": PROFILE_URN,
+        "author": ORGANIZATION_URN,
         "lifecycleState": "PUBLISHED",
         "specificContent": {
             "com.linkedin.ugc.ShareContent": {
