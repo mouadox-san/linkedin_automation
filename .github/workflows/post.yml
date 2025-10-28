@@ -21,8 +21,8 @@ jobs:
         id: get_data
         run: |
           python main.py get_data > data.txt
-          CONTENT=$(grep "CONTENT_TO_POST::" data.txt | sed 's/CONTENT_TO_POST:://' | xargs)
-          LOCAL_IMAGE_PATH=$(grep "LOCAL_IMAGE_PATH::" data.txt | sed 's/LOCAL_IMAGE_PATH:://' | xargs)
+          CONTENT=$(grep "CONTENT_TO_POST::" data.txt | sed 's/CONTENT_TO_POST:://' | tr -d '\n')
+          LOCAL_IMAGE_PATH=$(grep "LOCAL_IMAGE_PATH::" data.txt | sed 's/LOCAL_IMAGE_PATH:://' | tr -d '\n')
           echo "content=$CONTENT" >> "$GITHUB_OUTPUT"
           echo "local_image_path=$LOCAL_IMAGE_PATH" >> "$GITHUB_OUTPUT"
 
