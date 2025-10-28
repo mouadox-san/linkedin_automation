@@ -116,9 +116,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         action = sys.argv[1]
         if action == "get_data":
-            content, image_url = get_post_data_for_today()
+            content, local_image_path = get_post_data_for_today()
             print(f"CONTENT_TO_POST:::{content}")
-            print(f"IMAGE_URL_TO_DOWNLOAD:::{image_url}")
+            print(f"LOCAL_IMAGE_PATH:::{local_image_path}")
         elif action == "post":
             content = sys.argv[2]
             local_image_path = sys.argv[3] if len(sys.argv) > 3 else None
