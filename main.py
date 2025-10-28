@@ -46,9 +46,11 @@ def upload_image(image_url):
     asset_urn = upload_data["asset"]
 
     # Step 2: Download the image and upload it
-    image_response = requests.get(image_url, stream=True)
-    if image_response.status_code != 200:
-        print(f"Failed to download image from URL: {image_url}")
+    try:
+        image_response = requests.get(image_url, stream=True, timeout=10) # Added timeout
+        image_response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to download image from URL: {image_url}. Error: {e}")
         return None
 
     upload_headers = {
